@@ -27,10 +27,10 @@ emu6502: main.o cpu.o # This line will compile to .o every .c which need to be (
 	$(C) -o emu6502 main.o cpu.o
 
 main.o: main.c
-	$(C) -c main.c
+	$(C) -c main.c cpu.h
 	
 cpu.o: cpu.c
-	$(C) -c cpu.c cpu.h
+	$(C) -c  cpu.h cpu.c
 #$(OBJ): $(SRC)
 #	$(CXX) $(OUTPUT_OPTIONS) $(LDLIBS) $(SRC)
 

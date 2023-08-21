@@ -14,21 +14,6 @@ typedef struct Mem
     Byte Data[MAX_MEM];
 } Mem;
 
-void mem_init(Mem *self)
-{
-    for (u32 i = 0; i < MAX_MEM; i++) {
-        self->Data[i] = 0;
-    }
-}
-
-//read 1 byte
-Byte mem_read_byte(Mem *ram, u32 addr)
-{
-    //assert here that addr is less than MAX_MEM
-    if (addr < MAX_MEM){
-        return ram->Data[addr];
-    }
-}
 
 typedef struct CPU
 {
@@ -48,6 +33,11 @@ typedef struct CPU
     
     
 } CPU;
+
+void mem_init(Mem *self);
+
+//read 1 byte
+Byte mem_read_byte(Mem *ram, u32 addr);
 
 void cpu_reset(CPU *self, Mem *memory);
 

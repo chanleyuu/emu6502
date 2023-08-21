@@ -1,5 +1,21 @@
 #include "cpu.h" 
 
+void mem_init(Mem *self)
+{
+    for (u32 i = 0; i < MAX_MEM; i++) {
+        self->Data[i] = 0;
+    }
+}
+
+//read 1 byte
+Byte mem_read_byte(Mem *ram, u32 addr)
+{
+    //assert here that addr is less than MAX_MEM
+    if (addr < MAX_MEM){
+        return ram->Data[addr];
+    }
+}
+
 void cpu_reset(CPU *self, Mem *memory)
 {
     self->PC = 0xFFFC;
