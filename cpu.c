@@ -16,8 +16,19 @@ Byte mem_read_byte(Mem *ram, u32 addr)
     }
 }
 
+//read 1 byte
+void mem_write_byte(Mem *ram, u32 addr, Byte value)
+{
+    //assert here that addr is less than MAX_MEM
+    if (addr < MAX_MEM){
+        ram->Data[addr] = value;
+    }
+}
+
 void cpu_reset(CPU *self, Mem *memory)
 {
+    self->cycles = 0;
+    
     self->PC = 0xFFFC;
     self->SP = 0x0100;
     self->D = 0;
@@ -34,27 +45,34 @@ void cpu_reset(CPU *self, Mem *memory)
     mem_init(memory);
 }
 
-Byte cpu_fetch(CPU *self, Mem *memory, u32 *cycles)
+Byte cpu_fetch(CPU *self, Mem *memory)
 {
     Byte Data = mem_read_byte(memory, self->PC);
     self->PC++;
-    cycles--;
+    self->cycles--;
+    int c = self->cycles;
     return Data;
 }
 
-void cpu_execute(CPU *self, Mem *memory, u32 cycles)
+void cpu_execute(CPU *self, Mem *memory)
 {
-    while (cycles > 0)
+    self->cycles;
+    
+    while (self->cycles > 0)
     {
-        Byte Instruction = cpu_fetch(self, memory, &cycles);
+        Byte Instruction = cpu_fetch(self, memory);
         switch(Instruction)
         {
             case INS_LDA_IM:
             {
-               Byte value = cpu_fetch(self, memory, &cycles);
+               Byte value = cpu_fetch(self, memory);
                self->A = value;
                self->Z = (self->A == 0);
                self->N = (self->A & 0b10000000) > 0;
+            } break;
+            default:
+            {
+                printf("Could not execute instruction %d !!!!", Instruction);
             } break;
         }
     }

@@ -3,6 +3,8 @@
 //opcodes
 #define INS_LDA_IM 0xA9 //Load Accumulator
 
+#include <stdio.h>
+
 typedef unsigned char Byte;
 typedef unsigned short Word; 
 
@@ -17,6 +19,7 @@ typedef struct Mem
 
 typedef struct CPU
 {
+    u32 cycles;
     
     Word PC;    //Program counter
     Word SP;    //Stack pointer
@@ -42,8 +45,8 @@ Byte mem_read_byte(Mem *ram, u32 addr);
 void cpu_reset(CPU *self, Mem *memory);
 
 
-Byte cpu_fetch(CPU *self, Mem *memory, u32 *cycles);
+Byte cpu_fetch(CPU *self, Mem *memory);
 
 
-void cpu_execute(CPU *self, Mem *memory, u32 cycles);
+void cpu_execute(CPU *self, Mem *memory);
 
