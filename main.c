@@ -11,6 +11,7 @@ int main()
     //inline program
     ram.Data[0xFFFC] = INS_LDA_IM;
     ram.Data[0xFFFD] = 0x42;
+    //end lnline program
     cpu_execute(&cpu, &ram);
     return 0;
 }    

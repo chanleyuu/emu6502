@@ -45,6 +45,7 @@ void cpu_reset(CPU *self, Mem *memory)
     mem_init(memory);
 }
 
+//Fetch one byte from memory
 Byte cpu_fetch(CPU *self, Mem *memory)
 {
     Byte Data = mem_read_byte(memory, self->PC);
@@ -52,6 +53,21 @@ Byte cpu_fetch(CPU *self, Mem *memory)
     self->cycles--;
     int c = self->cycles;
     return Data;
+}
+
+//Read one byte in memory as a cycle but does not move the program counter
+Byte cpu_read(CPU *self, Mem *memory, Byte address)
+{
+    Byte Data = mem_read_byte(memory, address);
+    self->cycles--;
+    int c = self->cycles;
+    return Data;
+}
+
+void cpu_load_setstatus(CPU *self)
+{
+    self->Z = (self->A == 0); //Set Z flag if Accumulator is zero
+    self->N = (self->A & 0b10000000) > 0; //A is negative if negative flag is set
 }
 
 void cpu_execute(CPU *self, Mem *memory)
@@ -67,8 +83,13 @@ void cpu_execute(CPU *self, Mem *memory)
             {
                Byte value = cpu_fetch(self, memory);
                self->A = value;
-               self->Z = (self->A == 0);
-               self->N = (self->A & 0b10000000) > 0;
+               cpu_load_setstatus(self);
+            } break;
+            case INS_LSA_ZP:
+            {
+                Byte ZeroPageAddress = cpu_fetch(self, memory);
+                A = ReadByte(self, memory, ZeroPageAddress);
+                cpu_load_setstatus(self);
             } break;
             default:
             {

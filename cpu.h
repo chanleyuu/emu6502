@@ -1,7 +1,8 @@
 #define MAX_MEM (1024 * 64)
 
 //opcodes
-#define INS_LDA_IM 0xA9 //Load Accumulator
+#define INS_LDA_IM 0xA9 //Load Accumulator immediate
+#define INS_LDA_ZP 0xA5 //Load Accumulator zero page
 
 #include <stdio.h>
 
@@ -26,13 +27,14 @@ typedef struct CPU
     
     Byte A, X, Y; //Registers
 
-    Byte C : 1; //status flags
-    Byte Z : 1;
-    Byte I : 1;
-    Byte D : 1;
-    Byte B : 1;
-    Byte V : 1;
-    Byte N : 1;
+    //status flags
+    Byte C : 1; //Carry
+    Byte Z : 1; //Zero
+    Byte I : 1; //Interrupt Disable
+    Byte D : 1; //Decimal
+    Byte B : 1; //Break flag
+    Byte V : 1; //Overflow
+    Byte N : 1; //Negative
     
     
 } CPU;
@@ -44,9 +46,11 @@ Byte mem_read_byte(Mem *ram, u32 addr);
 
 void cpu_reset(CPU *self, Mem *memory);
 
-
 Byte cpu_fetch(CPU *self, Mem *memory);
 
+void cpu_load_setstatus()
+
+Byte cpu_read(CPU *self, Mem *memory, Byte address);
 
 void cpu_execute(CPU *self, Mem *memory);
 
